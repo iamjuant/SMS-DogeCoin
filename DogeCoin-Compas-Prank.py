@@ -15,7 +15,7 @@ class NewUser(unittest.TestCase):
 
         self.user = {
            'dAverageCost': self.getCurrentPrice(), #the average cost that you bought all your dogecoins
-           'initialDesiredPercentageChange':0.2, #percentage that the assistant will use to send first sms
+           'initialDesiredPercentageChange':3, #percentage that the assistant will use to send first sms
            'percentageChangeAfter':0.4, #percentage after the first sms ex. first is 2% and this one is 0.5, so you will receive a message at 2%, 2.5% 3%... or in a negative way
         }
     def updateUser(self):
@@ -63,26 +63,26 @@ class NewUser(unittest.TestCase):
             print(f'The price to watch is { user["dAverageCost"] } ')
             print('Current dogecoin is: ',dogecoin)
             #We get the percentage change for what we have
-            percentage = (dogecoin/user['dAverageCost'])-1 #this operation will give the +/- percentage change
+            percentage = ((dogecoin/user['dAverageCost'])-1)*100 #this operation will give the +/- percentage change
             print(f'The percentage change is {round(percentage,3)} \n')
 
             if  percentage > self.user['initialDesiredPercentageChange'] and self.flag=='GO': 
                 #send SMS 
                 message=f'The Percentage change is more than {user["initialDesiredPercentageChange"]}% time to check DOGECOIN!! \n Sending SMS \n'
                 print(message)
-                # self.sendSMS(message)
+                self.sendSMS(message)
                 self.flag='STOP'
 
             elif percentage < -user['initialDesiredPercentageChange'] and self.flag == 'GO':
                 message = f'The Percentage change is less than {user["initialDesiredPercentageChange"]}% time to check DOGECOIN!! \n Sending SMS \n'
-                # self.sendSMS(message)
+                self.sendSMS(message)
                 print(message)
                 self.flag = 'STOP'
             else: # If it is between the range just pass
                 pass
-            #we update the user just in case he sends new parameters through sms
+            #we update the user just in case he sends new parameters through smsmd
             self.updateUser()
-            time.sleep(5) #we sleep the loop for some seconds 
+            time.sleep(4) #we sleep the loop for some seconds 
     def tearDown(self):
         time.sleep(1.0)
         self.driver.quit()
